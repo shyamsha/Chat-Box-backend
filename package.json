@@ -1,0 +1,21 @@
+{
+  "name": "chat_backend",
+  "version": "1.0.0",
+  "description": "chat-bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.10",
+    "multer": "^1.4.1",
+    "socket.io": "^2.2.0",
+    "validator": "^10.11.0"
+  }
+}
