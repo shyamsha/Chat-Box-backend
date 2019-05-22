@@ -18,10 +18,8 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
 	const body = req.body;
 
-	//static method
 	User.findByCredentials(body.email, body.password)
 		.then(user => {
-			//instance method
 			return user.generateByToken();
 			//res.send(" successfully logedin ");
 		})
@@ -47,18 +45,7 @@ router.delete("/logout", authenticationByUser, (req, res) => {
 			res.send(err);
 		});
 });
-router.delete("/logoutall", authenticationByUser, (req, res) => {
-	let token = req.token;
-	User.findOneAndUpdate(req.user._id, { $set: { tokens: [] } })
-		.then(user => {
-			user.save().then(user => {
-				res.send({ statusText: "suceessfully logout from all devices" });
-			});
-		})
-		.catch(err => {
-			res.send(err);
-		});
-});
+
 router.get("/", (req, res) => {
 	User.find()
 		.then(user => {

@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 3001;
+var socket = require("socket.io");
+
 const mongoose = require("./config/db_connect");
 
 const { userController } = require("./app/controllers/user_controller");
@@ -23,6 +25,12 @@ app.use(function(req, res) {
 		);
 });
 
-app.listen(port, () => {
+server = app.listen(port, () => {
 	console.log("listining from", port);
+});
+io = socket(server);
+io.on("connection", socket => {
+	socket.on("SEND_MESSAGE", function(data) {
+		io.emit("RECEIVE_MESSAGE", data);
+	});
 });
