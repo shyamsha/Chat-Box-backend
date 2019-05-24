@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
-router.get("/", (req, res) => {
+const { authenticationByUser } = require("../middlewares/authenticate");
+const { ChannelList } = require("../models/channels");
+router.get("/", authenticationByUser, (req, res) => {
+	const id = req.user._id;
 	ChannelList.find()
 		.then(channels => {
 			res.send(channels);
@@ -10,9 +12,9 @@ router.get("/", (req, res) => {
 			res.send(err);
 		});
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", authenticationByUser, (req, res) => {
 	const id = req.params.id;
-	ChannelList.findByOne(id)
+	ChannelList.findOne({ id: id })
 		.then(channel => {
 			res.send(channel);
 		})
@@ -20,7 +22,7 @@ router.get("/:id", (req, res) => {
 			res.send(err);
 		});
 });
-router.post("/create", (req, res) => {
+router.post("/", authenticationByUser, (req, res) => {
 	const channels = new ChannelList(req.body);
 	channels
 		.save()
@@ -41,7 +43,7 @@ router.put("/:id", (req, res) => {
 			res.send(err);
 		});
 });
-router.delete("/:id", (req, res) => {
+router.delete("/:id", authenticationByUser, (req, res) => {
 	const id = req.params.id;
 	ChannelList.findOneAndUpdate(id)
 		.then(channel => {

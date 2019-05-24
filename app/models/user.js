@@ -46,9 +46,14 @@ const userSchema = new Schema({
 	role: {
 		type: [String],
 		default: ["user"]
-	}
+	},
+	ChannelList: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "ChannelList"
+		}
+	]
 });
-//generate password encrprition hide the original password
 userSchema.pre("save", function(next) {
 	if (this.isNew) {
 		bcryptjs.genSalt(10).then(salt => {
