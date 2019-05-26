@@ -8,6 +8,7 @@ const mongoose = require("./config/db_connect");
 
 const { userController } = require("./app/controllers/user_controller");
 const { channelController } = require("./app/controllers/channel_controller");
+const { messageController } = require("./app/controllers/message_controller");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use("/users", userController);
 app.use("/channels", channelController);
+app.use("/messages", messageController);
 
 app.get("/", (req, res) => {
 	res.send("Welcome to your chat");
@@ -34,22 +36,13 @@ server = app.listen(port, () => {
 });
 io = socket(server);
 io.on("connection", socket => {
+	socket.on("JOIN_ROOM", data => {
+		socket.join(data.channel);
+		console.log("user joined ", data.channel);
+	});
 	socket.on("SEND_MESSAGE", function(data) {
-		console.log(data);
-		socket.emit("RECEIVE_MESSAGE", data);
-	});
-	// when the client emits 'typing', we broadcast it to others
-	socket.on("typing", () => {
-		socket.broadcast.emit("typing", {
-			username: socket.username
-		});
-	});
-
-	// when the client emits 'stop typing', we broadcast it to others
-	socket.on("stop typing", () => {
-		socket.broadcast.emit("stop typing", {
-			username: socket.username
-		});
+		console.log(io.sockets);
+		io.sockets.in(data.channel).emit("RECEIVE_MESSAGE", data);
 	});
 
 	socket.on("disconnect", () => console.log("Client disconnected"));

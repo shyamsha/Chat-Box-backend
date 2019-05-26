@@ -14,7 +14,7 @@ router.get("/", authenticationByUser, (req, res) => {
 });
 router.get("/:id", authenticationByUser, (req, res) => {
 	const id = req.params.id;
-	ChannelList.findOne({ id: id })
+	ChannelList.findOne({ _id: id })
 		.then(channel => {
 			res.send(channel);
 		})
@@ -36,8 +36,9 @@ router.post("/", authenticationByUser, (req, res) => {
 router.put("/:id", (req, res) => {
 	const id = req.params.id;
 	ChannelList.findOneAndUpdate(id, { $set: req.body }, { new: true })
-		.then(channel => {
-			res.send(channel);
+		.then(response => {
+			console.log(response);
+			io.sockets.in(id).emit("RECEIVE_MESSAGE", response.messages);
 		})
 		.catch(err => {
 			res.send(err);

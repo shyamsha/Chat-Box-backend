@@ -3,22 +3,24 @@ const validator = require("validator");
 const { Schema } = mongoose;
 const messagesSchema = new Schema({
 	messages: [
-	text:{
-			type: String
-		},
+		{
+			message: {
+				type: String
+			},
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: "User"
+			},
+			Channel: {
+				type: Schema.Types.ObjectId,
+				ref: "ChannelList"
+			}
+		}
 	],
 	createdAt: {
 		type: Date,
 		default: Date.now
-	},
-	user: {
-		type: Schema.Types.ObjectId,
-		ref: "User"
-	},
-	ChannelList:{
-			type: Schema.Types.ObjectId,
-			ref: "ChannelList"
-		}
+	}
 });
 const Messages = mongoose.model("Messages", messagesSchema);
 module.exports = {

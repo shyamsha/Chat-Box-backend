@@ -27,7 +27,26 @@ const channelListSchema = new Schema({
 	user: {
 		type: Schema.Types.ObjectId,
 		ref: "User"
-	}
+	},
+	messages: [
+		{
+			message: {
+				type: String
+			},
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: "User"
+			}
+		}
+	],
+	channelUsers: [
+		{
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: "User"
+			}
+		}
+	]
 });
 const ChannelList = mongoose.model("ChannelList", channelListSchema);
 module.exports = {
