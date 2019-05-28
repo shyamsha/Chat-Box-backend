@@ -27,23 +27,25 @@ app.use(function(req, res) {
 	res
 		.status(404)
 		.send(
-			"The resource you are looking for doesn’t exist." + "\n Not Found " + 404
+			"The resource you are looking for doesn’t exist." + "\n 404 Not Found "
 		);
 });
 
 server = app.listen(port, () => {
 	console.log("listining from", port);
 });
+
 io = socket(server);
 io.on("connection", socket => {
 	socket.on("JOIN_ROOM", data => {
+		console.log(data);
 		socket.join(data.channel);
+
 		console.log("user joined ", data.channel);
 	});
 	socket.on("SEND_MESSAGE", function(data) {
-		console.log(io.sockets);
+		console.log(data);
 		io.sockets.in(data.channel).emit("RECEIVE_MESSAGE", data);
 	});
-
 	socket.on("disconnect", () => console.log("Client disconnected"));
 });

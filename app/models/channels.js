@@ -36,6 +36,10 @@ const channelListSchema = new Schema({
 			user: {
 				type: Schema.Types.ObjectId,
 				ref: "User"
+			},
+			channel: {
+				type: Schema.Types.ObjectId,
+				ref: "ChannelList"
 			}
 		}
 	],
